@@ -392,6 +392,6 @@ async function downloadPDF(){
 
     }
 
-    pdf.save(`Bill_${billNumber}.pdf`);
+    pdf.save(`Bill_${Date.now()}.pdf`);
 
 }

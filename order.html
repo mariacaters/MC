@@ -741,7 +741,7 @@ async function downloadPDF() {
     const firstValue =
         document.querySelector('input[name="detail_value[]"]')?.value.trim();
 
-    pdf.save(`Order_${orderNumber}.pdf`);
+    pdf.save(`Order_${Date.now()}.pdf`);
 }
 </script>
 </body>

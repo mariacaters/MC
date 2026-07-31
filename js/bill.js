@@ -193,7 +193,7 @@ async function saveBill(event) {
 
         alert(editing ? "Bill updated successfully!" : "Bill saved successfully!");
 
-        window.location.href = "index.html";
+        
 
     } else {
 

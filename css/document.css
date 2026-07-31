@@ -1,68 +1,95 @@
-
-
-#pdfPreview{
-    margin-top:30px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:30px;
-    overflow-x:auto;
-    padding-bottom:20px;
+#pdfPreview {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 20px;
 }
 
-.preview-page{
-    width:min(794px,75vw);
-    aspect-ratio:794/1123;
-    position:relative;
-    background:#000;
-    box-shadow:0 8px 25px rgba(0,0,0,.2);
+/* 1. Lock the canvas to exact fixed dimensions */
+.preview-page {
+    width: 794px;
+    height: 1123px;
+    min-width: 794px;   /* Prevents flexbox or viewport from shrinking the element */
+    min-height: 1123px;
+    position: relative;
+    background: #000;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
 }
 
-.preview-page img{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
+.preview-page img.preview-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill; /* Ensures full background coverage */
 }
 
-.preview-content{
-    position:absolute;
-    top:90px;
-    left:30px;
-    right:30px;
-    bottom:20px;
-    overflow:hidden;
-    color:#fff;
-    font-family:"Times New Roman", serif;
-}
-.pdf-detail{
-    font-size:10px;
-    line-height:1.8;
-}
-.detail-label{
-    display:inline-block;
-    width:100px;
-    font-weight:bold;
-}
-.detail-value{
-    display:inline;
-}
-.pdf-category{
-    font-family:"Cinzel", serif;
-    font-size:15px;
-    font-weight:600;
-    color:#c9a227;
-    margin-bottom:3px;
-    padding-bottom:3px;
-    border-bottom:1px solid #c9a227;
+.preview-content {
+    position: absolute;
+    top: 210px;
+    left: 80px;
+    right: 80px;
+    bottom: 50px;
+    overflow: hidden;
+    color: #fff;
+    font-family: "Times New Roman", serif;
 }
 
-.pdf-item{
-    margin-left:22px;
-    font-size:10px;
-    line-height:1.7;
+/* Font sizes remain relative to the 794px locked canvas */
+.pdf-detail {
+    font-size: 18px; /* Increased slightly for clear readability at 794px width */
+    line-height: 1.8;
 }
-.pdf-section{
-    margin-top:8px;
-    margin-bottom:8px;
+
+.detail-label {
+    display: inline-block;
+    width: 120px;
+    font-weight: bold;
+}
+
+.detail-value {
+    display: inline;
+}
+
+.pdf-category {
+    font-family: "Cinzel", serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #c9a227;
+    margin-bottom: 3px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #c9a227;
+}
+
+.pdf-item {
+    margin-left: 22px;
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.pdf-section {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+/* 2. Scale down visually on smaller screens without distorting element ratios */
+@media (max-width: 850px) {
+    .preview-page {
+        transform: scale(0.75);
+        transform-origin: top center;
+        margin-bottom: -280px; /* Offset whitespace created by transform scaling */
+    }
+}
+
+@media (max-width: 600px) {
+    .preview-page {
+        transform: scale(0.48);
+        transform-origin: top center;
+        margin-bottom: -580px; /* Offset whitespace created by transform scaling */
+    }
 }

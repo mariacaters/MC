@@ -62,11 +62,6 @@ async function loadOrders() {
 
                 <div class="actions">
 
-                    <a href="#" class="btn print"
-                        onclick="printMenu(${order.id})">
-                        Print
-                    </a>
-
                     <a href="order.html?id=${order.id}"
                         class="btn edit">
                         Edit
@@ -156,11 +151,7 @@ async function loadBills() {
 
                 <div class="actions">
 
-                    <a href="#"
-                        class="btn print"
-                        onclick="printBill(${bill.id})">
-                        Print
-                    </a>
+                    
 
                     <a href="bill.html?id=${bill.id}"
                         class="btn edit">

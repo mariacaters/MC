@@ -219,8 +219,6 @@ async function saveOrder(event) {
 
         alert(editing ? "Order updated successfully!" : "Order saved successfully!");
 
-        window.location.href = "index.html";
-
     } else {
 
         alert("Failed to save order.");

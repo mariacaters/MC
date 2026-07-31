@@ -177,7 +177,7 @@ button{
 .bill-item-row{
     display:flex;
     justify-content:space-between;
-    font-size:10px;
+    font-size:18px;
     margin-bottom:8px;
     color:#fff;
 }
@@ -194,7 +194,7 @@ button{
     padding-top:8px;
     border-top:2px solid #c9a227;
     color:#c9a227;
-    font-size:15px;
+    font-size:25px;
     font-weight:bold;
     font-family:"Cinzel", serif;
 }
@@ -203,5 +203,5 @@ button{
     background: linear-gradient(90deg, #b8860b, #ffd700, #b8860b);
     border: none;
     border-radius: 2px;
-    margin: 6px 0;
+    margin: 6px 0 13px 0;
 }

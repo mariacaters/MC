@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Bill</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="css/document.css">
+    <link rel="stylesheet" href="css/bill.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Create Bill</h1>
+
+    <form id="billForm">
+
+        <div class="form-row">
+            <label>Bill Details</label>
+
+            <div id="detailsContainer">
+
+                <div class="detail-row">
+                    <input
+                        type="text"
+                        name="detail_key[]"
+                        placeholder="Label"
+                        oninput="renderPreview()">
+
+                    <input
+                        type="text"
+                        name="detail_value[]"
+                        placeholder="Value"
+                        oninput="renderPreview()">
+
+                    <button
+                        type="button"
+                        class="remove-detail-btn">
+                        ×
+                    </button>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="add-category-btn"
+                id="addDetailBtn">
+
+                + Add Detail
+
+            </button>
+        </div>
+
+        <hr class="gold-divider">
+
+        <div class="form-row">
+            <label>Bill Items</label>
+
+            <div id="itemsContainer">
+
+                <div class="detail-row">
+                    <input
+                        type="text"
+                        name="item_key[]"
+                        placeholder="Item"
+                        oninput="renderPreview()">
+
+                    <input
+                        type="text"
+                        name="item_value[]"
+                        placeholder="Amount"
+                        oninput="renderPreview()">
+
+                    <button
+                        type="button"
+                        class="remove-detail-btn">
+                        ×
+                    </button>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="add-category-btn"
+                id="addItemBtn">
+
+                + Add Item
+
+            </button>
+        </div>
+
+        <hr class="gold-divider">
+
+        <div class="total-section">
+            <div class="total-container">
+                <label>Total</label>
+                <input
+                    type="text"
+                    name="total"
+                    id="totalInput"
+                    class="total-input"
+                    placeholder="Total Amount"
+                    oninput="renderPreview()">
+            </div>
+        </div>
+
+        <!-- ACTION BUTTONS SIDE-BY-SIDE -->
+        <div class="button-row">
+            <button
+                type="button"
+                class="download-pdf-btn"
+                onclick="downloadPDF()">
+
+                Download PDF
+
+            </button>
+
+            <button
+                type="submit"
+                class="save-btn">
+
+                Save Bill
+
+            </button>
+        </div>
+
+    </form>
+
+</div>
+<h2 style="margin-top:40px;">PDF Preview</h2>
+<div id="pdfPreview"></div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const detailsContainer = document.getElementById("detailsContainer");
+    const itemsContainer = document.getElementById("itemsContainer");
+
+    document.getElementById("addDetailBtn").onclick = function(){
+        const row = document.createElement("div");
+        row.className = "detail-row";
+        row.innerHTML = `
+            <input
+                type="text"
+                name="detail_key[]"
+                placeholder="Label"
+                oninput="renderPreview()">
+
+            <input
+                type="text"
+                name="detail_value[]"
+                placeholder="Value"
+                oninput="renderPreview()">
+
+            <button
+                type="button"
+                class="remove-detail-btn">
+                ×
+            </button>
+        `;
+        detailsContainer.appendChild(row);
+        renderPreview();
+    };
+
+    document.getElementById("addItemBtn").onclick = function(){
+        const row = document.createElement("div");
+        row.className = "detail-row";
+        row.innerHTML = `
+            <input
+                type="text"
+                name="item_key[]"
+                placeholder="Item"
+                oninput="renderPreview()">
+
+            <input
+                type="text"
+                name="item_value[]"
+                placeholder="Amount"
+                oninput="renderPreview()">
+
+            <button
+                type="button"
+                class="remove-detail-btn">
+                ×
+            </button>
+        `;
+        itemsContainer.appendChild(row);
+        renderPreview();
+    };
+
+    document.addEventListener("click", function(e){
+        if(e.target.classList.contains("remove-detail-btn")){
+            const row = e.target.parentElement;
+            const container = row.parentElement;
+            if(container.querySelectorAll(".detail-row").length > 1){
+                row.remove();
+                renderPreview();
+            }
+        }
+    });
+
+    renderPreview();
+});
+
+async function updateSuggestions(element){
+
+    // Will be implemented using IndexedDB.
+
+}
+</script>
+<script src="js/database.js"></script>
+<script src="js/bill.js"></script>
+</body>
+</html>

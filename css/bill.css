@@ -1,0 +1,207 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f4f4;
+    padding:15px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.form-row{
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    margin-bottom:5px;
+    font-weight:bold;
+}
+
+.form-row input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    font-size:15px;
+}
+
+.detail-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.detail-row input{
+    flex:1;
+}
+
+.remove-detail-btn{
+    width:45px;
+    border:none;
+    border-radius:5px;
+    background:#dc2626;
+    color:#fff;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.remove-detail-btn:hover{
+    background:#b91c1c;
+}
+
+.add-category-btn{
+    margin-top:15px;
+    padding:12px 20px;
+    border:none;
+    border-radius:5px;
+    background:#2563eb;
+    color:#fff;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.add-category-btn:hover{
+    background:#1d4ed8;
+}
+
+.gold-divider {
+    height: 5px;
+    background: linear-gradient(90deg, #b8860b, #ffd700, #b8860b);
+    border: none;
+    border-radius: 5px;
+    margin: 25px 0;
+}
+
+.total-section {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+.total-container {
+    width: 35%;
+}
+
+.total-input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.save-btn{
+    flex: 1;
+    padding:14px;
+    border:none;
+    border-radius:5px;
+    background:#16a34a;
+    color:#fff;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.save-btn:hover{
+    background:#15803d;
+}
+
+/* Side-by-Side Action Buttons */
+.button-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.download-pdf-btn {
+    flex: 1;
+    padding: 14px;
+    border: 1px solid #0284c7;
+    border-radius: 5px;
+    background: #0284c7;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.download-pdf-btn:hover {
+    background: #0369a1;
+}
+
+button{
+    transition:.2s;
+}
+
+@media(max-width:768px){
+
+    .container{
+        padding:15px;
+    }
+
+    .detail-row{
+        flex-direction:row;
+    }
+
+    .add-category-btn{
+        width:100%;
+    }
+
+    .total-container {
+        width: 100%;
+    }
+
+    .button-row {
+        flex-direction: column;
+    }
+}
+
+.bill-item-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:10px;
+    margin-bottom:8px;
+    color:#fff;
+}
+
+.bill-item-row span:first-child{
+    font-weight:500;
+}
+
+.bill-total{
+
+    display:flex;
+    justify-content:space-between;
+    margin-top:20px;
+    padding-top:8px;
+    border-top:2px solid #c9a227;
+    color:#c9a227;
+    font-size:15px;
+    font-weight:bold;
+    font-family:"Cinzel", serif;
+}
+.details-gap{
+    height: 1px;
+    background: linear-gradient(90deg, #b8860b, #ffd700, #b8860b);
+    border: none;
+    border-radius: 2px;
+    margin: 6px 0;
+}

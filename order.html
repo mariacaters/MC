@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Menu Order</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="css/document.css">
+    <link rel="stylesheet" href="css/order.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Create Menu Order</h1>
+
+    <form id="orderForm">
+
+        <div class="form-row">
+            <label>Order Details</label>
+
+            <div id="detailsContainer">
+
+                <div class="detail-row">
+                    <input
+                        type="text"
+                        name="detail_key[]"
+                        placeholder="Label (Example: Event)"
+                        required
+                        oninput="renderPreview()">
+
+                    <input
+                        type="text"
+                        name="detail_value[]"
+                        placeholder="Value"
+                        required
+                        oninput="renderPreview()">
+
+                    <button
+                        type="button"
+                        class="remove-detail-btn">
+                        ×
+                    </button>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="add-category-btn"
+                id="addDetailBtn">
+
+                + Add Detail
+
+            </button>
+        </div>
+
+        <div class="table-wrapper">
+
+            <table id="menuTable">
+
+                <thead>
+                    <tr>
+                        <th width="25%">Category</th>
+                        <th width="65%">Items</th>
+                        <th width="10%">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="categoryBody">
+
+                    <tr class="category-row">
+
+                        <!-- CATEGORY -->
+
+                        <td>
+
+                            <input
+                                type="text"
+                                name="category[]"
+                                class="category-input"
+                                placeholder="Category Name"
+                                oninput="updateSuggestions(this); renderPreview();">
+
+                        </td>
+
+                        <!-- ITEMS -->
+
+                        <td>
+
+                            <div class="item-box">
+
+                                <div class="item-input-row">
+
+                                    <input
+                                        type="text"
+                                        class="item-input"
+                                        list="menu-items"
+                                        placeholder="Menu Item"
+                                        onfocus="updateSuggestions(this)">
+
+                                    <button
+                                        type="button"
+                                        class="item-add-btn"
+                                        onclick="addItem(this)">
+                                        +
+                                    </button>
+
+                                </div>
+
+                                <div class="item-list">
+
+                                </div>
+
+                                <!-- Hidden field submitted to Django -->
+
+                                <input
+                                    type="hidden"
+                                    name="items[]"
+                                    class="items-hidden">
+
+                            </div>
+
+                        </td>
+
+                        <!-- CATEGORY ACTIONS -->
+
+                        <td class="action-cell">
+
+                            <button
+                                type="button"
+                                class="move-btn"
+                                onclick="moveUp(this)">
+                                Move Up ↑
+                            </button>
+
+                            <button
+                                type="button"
+                                class="move-btn"
+                                onclick="moveDown(this)">
+                                Move Down ↓
+                            </button>
+
+                            <button
+                                type="button"
+                                class="remove-btn"
+                                onclick="removeCategory(this)">
+                                Remove
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <button
+            type="button"
+            class="add-category-btn"
+            onclick="addCategory()">
+
+            + Add Category
+
+        </button>
+
+        <!-- LIVE PREVIEW SECTION -->
+        <h2 style="margin-top:50px;text-align:center;">PDF Preview</h2>
+        <div id="pdfPreview"></div>
+           
+
+        <!-- ACTION BUTTONS SIDE-BY-SIDE -->
+        <div class="button-row">
+            <button
+                type="button"
+                class="download-pdf-btn"
+                onclick="downloadPDF()">
+
+                Download PDF
+
+            </button>
+
+            <button
+                type="submit"
+                class="save-btn">
+
+                Save Order
+
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+
+<template id="categoryTemplate">
+
+<tr class="category-row">
+
+    <td>
+
+        <input
+            type="text"
+            name="category[]"
+            class="category-input"
+            placeholder="Category Name"
+            oninput="updateSuggestions(this); renderPreview();">
+
+    </td>
+
+    <td>
+
+        <div class="item-box">
+
+            <div class="item-input-row">
+
+                <input
+                    type="text"
+                    class="item-input"
+                    list="menu-items"
+                    placeholder="Menu Item"
+                    onclick="updateSuggestions(this)">
+
+                <button
+                    type="button"
+                    class="item-add-btn"
+                    onclick="addItem(this)">
+                    +
+                </button>
+
+            </div>
+
+            <div class="item-list">
+
+            </div>
+
+            <input
+                type="hidden"
+                name="items[]"
+                class="items-hidden">
+
+        </div>
+
+    </td>
+
+    <td class="action-cell">
+
+        <button
+            type="button"
+            class="move-btn"
+            onclick="moveUp(this)">
+            Move Up ↑
+        </button>
+
+        <button
+            type="button"
+            class="move-btn"
+            onclick="moveDown(this)">
+            Move Down ↓
+        </button>
+
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="removeCategory(this)">
+            Remove
+        </button>
+
+    </td>
+
+</tr>
+
+</template>
+<script src="js/defaultSuggestions.js"></script>
+<script src="js/database.js"></script>
+<script src="js/order.js"></script>
+<script>
+
+function addCategory() {
+
+    const template = document
+        .getElementById("categoryTemplate");
+
+    const clone = template.content.cloneNode(true);
+
+    document
+        .getElementById("categoryBody")
+        .appendChild(clone);
+
+    renderPreview();
+}
+
+
+function addItem(btn) {
+
+    const box = btn.closest(".item-box");
+
+    const input = box.querySelector(".item-input");
+
+    const list = box.querySelector(".item-list");
+
+    const hidden = box.querySelector(".items-hidden");
+
+    const value = input.value.trim();
+
+    if(value === "")
+        return;
+
+    const exists = [...list.querySelectorAll(".item-chip span")]
+        .some(span => span.textContent.toLowerCase() === value.toLowerCase());
+
+    if(exists){
+        input.value = "";
+        input.focus();
+        return;
+    }
+
+    const chip = document.createElement("div");
+    chip.className = "item-chip";
+
+    chip.innerHTML = `
+        <span>${value}</span>
+        <button type="button"
+                onclick="removeItem(this)">
+            ×
+        </button>
+    `;
+
+    list.appendChild(chip);
+
+    updateHidden(box);
+
+    input.value = "";
+    input.focus();
+
+    renderPreview();
+}
+
+function removeItem(btn){
+
+    const box = btn.closest(".item-box");
+
+    btn.parentElement.remove();
+
+    updateHidden(box);
+
+    renderPreview();
+}
+
+
+function updateHidden(box){
+
+    const hidden = box.querySelector(".items-hidden");
+
+    const items = [];
+
+    box.querySelectorAll(".item-chip span")
+        .forEach(function(span){
+
+            items.push(span.textContent);
+
+        });
+
+    hidden.value = items.join("\n");
+
+}
+
+function removeCategory(btn) {
+    const rows = document.querySelectorAll(".category-row");
+
+    if (rows.length === 1) {
+        alert("At least one category is required.");
+        return;
+    }
+
+    const confirmed = confirm("Are you sure you want to delete this category?");
+
+    if (!confirmed) {
+        return;
+    }
+
+    btn.closest(".category-row").remove();
+
+    renderPreview();
+}
+
+
+
+function moveUp(btn){
+
+    const row =
+        btn.closest(".category-row");
+
+    const prev =
+        row.previousElementSibling;
+
+    if(prev){
+
+        row.parentNode.insertBefore(
+            row,
+            prev
+        );
+
+        renderPreview();
+    }
+
+}
+
+
+function moveDown(btn){
+
+    const row =
+        btn.closest(".category-row");
+
+    const next =
+        row.nextElementSibling;
+
+    if(next){
+
+        row.parentNode.insertBefore(
+            next,
+            row
+        );
+
+        renderPreview();
+    }
+
+}
+
+function updateSuggestions(element){
+
+    const row = element.closest(".category-row");
+
+    const category = row.querySelector(".category-input")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const datalist = document.getElementById("menu-items");
+
+    datalist.innerHTML = "";
+
+    let items = [];
+
+    if (typeof menuData !== "undefined") {
+        Object.keys(menuData).forEach(function(key){
+
+            if(key.toLowerCase() === category){
+
+                items = menuData[key];
+
+            }
+
+        });
+
+        if(items.length === 0){
+
+            Object.values(menuData).forEach(function(list){
+
+                list.forEach(function(item){
+
+                    if(!items.includes(item)){
+                        items.push(item);
+                    }
+
+                });
+
+            });
+
+        }
+    }
+
+    items.forEach(function(item){
+
+        const option = document.createElement("option");
+
+        option.value = item;
+
+        datalist.appendChild(option);
+
+    });
+
+}
+
+document.addEventListener("keydown", function(e){
+
+    if(
+        e.target.classList.contains("item-input")
+        &&
+        e.key === "Enter"
+    ){
+
+        e.preventDefault();
+
+        const button =
+            e.target.parentElement
+                .querySelector(".item-add-btn");
+
+        addItem(button);
+
+    }
+
+});
+
+const detailsContainer = document.getElementById("detailsContainer");
+
+document.getElementById("addDetailBtn").onclick = function(){
+
+    const row = document.createElement("div");
+
+    row.className = "detail-row";
+
+    row.innerHTML = `
+        <input
+            type="text"
+            name="detail_key[]"
+            placeholder="Label"
+            required
+            oninput="renderPreview()">
+
+        <input
+            type="text"
+            name="detail_value[]"
+            placeholder="Value"
+            required
+            oninput="renderPreview()">
+
+        <button
+            type="button"
+            class="remove-detail-btn">
+            ×
+        </button>
+    `;
+
+    detailsContainer.appendChild(row);
+
+    renderPreview();
+};
+
+document.addEventListener("click", function(e){
+
+    if(e.target.classList.contains("remove-detail-btn")){
+
+        if(document.querySelectorAll(".detail-row").length > 1){
+
+            e.target.parentElement.remove();
+
+            renderPreview();
+        }
+
+    }
+
+});
+
+function collectOrderData(){
+
+    const data = {
+        details: [],
+        categories: []
+    };
+
+    // Details
+    document.querySelectorAll(".detail-row").forEach(row=>{
+
+        const inputs = row.querySelectorAll("input");
+
+        if(inputs.length<2) return;
+
+        const key = inputs[0].value.trim();
+        const value = inputs[1].value.trim();
+
+        if(key || value){
+
+            data.details.push({
+                key,
+                value
+            });
+
+        }
+
+    });
+
+    // Categories
+    document.querySelectorAll(".category-row").forEach(row=>{
+
+        const category =
+            row.querySelector(".category-input").value.trim();
+
+        const items = [];
+
+        row.querySelectorAll(".item-chip span").forEach(span=>{
+
+            items.push(span.textContent);
+
+        });
+
+        if(category || items.length){
+
+            data.categories.push({
+
+                name:category,
+
+                items:items
+
+            });
+
+        }
+
+    });
+
+    return data;
+
+}
+
+function buildOrderPreview(){
+
+    const data = collectOrderData();
+
+    const blocks = [];
+
+    // Details
+    data.details.forEach(detail=>{
+
+        blocks.push(createBlock(`
+            <div class="pdf-detail">
+                <span class="detail-label">${detail.key}</span>
+                <span class="detail-value">: ${detail.value}</span>
+            </div>
+        `));
+
+    });
+
+    // Space after details
+    blocks.push(createBlock(`<div style="height:12px;"></div>`));
+
+    // Categories
+    data.categories.forEach(category=>{
+
+        // Category heading
+        blocks.push(createBlock(`
+            <div class="pdf-category">
+                ${category.name}
+            </div>
+        `));
+
+        // One block per item
+        category.items.forEach(item=>{
+
+            blocks.push(createBlock(`
+                <div class="pdf-item">
+                    • ${item}
+                </div>
+            `));
+
+        });
+
+        // Gap after category
+        blocks.push(createBlock(`
+            <div style="height:10px;"></div>
+        `));
+
+    });
+
+    return blocks;
+
+}
+
+/* --- RENDER PREVIEW ENGINE --- */
+function renderPreview() {
+    const preview = document.getElementById("pdfPreview");
+    preview.innerHTML = "";
+    const page = createPage();
+    preview.appendChild(page);
+    const content = page.querySelector(".preview-content");
+    const blocks = buildOrderPreview();
+    let currentPage = page;
+    let currentContent = content;
+
+    blocks.forEach(block => {
+
+        currentContent.appendChild(block);
+
+        if (isPageFull(currentContent)) {
+
+            currentContent.removeChild(block);
+
+            currentPage = createPage();
+
+            preview.appendChild(currentPage);
+
+            currentContent =
+                currentPage.querySelector(".preview-content");
+
+            currentContent.appendChild(block);
+
+        }
+
+    });
+}
+
+function isPageFull(content) {
+    return content.scrollHeight > content.clientHeight;
+}
+
+async function downloadPDF() {
+
+    renderPreview();
+
+    const { jsPDF } = window.jspdf;
+
+    const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "px",
+        format: [794, 1123]
+    });
+
+    const pages = document.querySelectorAll(".preview-page");
+
+    for (let i = 0; i < pages.length; i++) {
+
+        const canvas = await html2canvas(pages[i], {
+            scale: 2,
+            useCORS: true
+        });
+
+        const img = canvas.toDataURL("image/png");
+
+        if (i > 0)
+            pdf.addPage();
+
+        pdf.addImage(img, "PNG", 0, 0, 794, 1123);
+
+    }
+
+    const firstValue =
+        document.querySelector('input[name="detail_value[]"]')?.value.trim();
+
+    pdf.save(`Order_${orderNumber}.pdf`);
+}
+</script>
+</body>
+</html>

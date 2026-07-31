@@ -368,7 +368,7 @@ async function downloadPDF(){
     for(let i = 0; i < pages.length; i++){
 
         const canvas = await html2canvas(pages[i],{
-            scale:3,
+            scale:5,
             useCORS:true
         });
 

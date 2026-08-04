@@ -7,6 +7,7 @@
     width: 100%;
     overflow: auto;
     padding-bottom: 20px;
+    background-color:black;
 }
 
 /* 1. Lock the canvas to exact fixed dimensions */
@@ -18,7 +19,8 @@
     position: relative;
     background: #000;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
+    box-sizing: border-box;    
+    background-color:black;
 }
 
 .preview-page img.preview-bg {

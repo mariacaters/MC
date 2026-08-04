@@ -7,6 +7,7 @@
     width: 100%;
     overflow: auto;
     padding-bottom: 20px;
+    background-color:black;
 }
 
 /* 1. Lock the canvas to exact fixed dimensions */

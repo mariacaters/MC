@@ -384,10 +384,10 @@ async function downloadPDF(){
         pdf.addImage(
             img,
             "PNG",
-            0,
-            0,
-            width,
-            height
+            -1,
+            -1,
+            width + 2,
+            height + 2
         );
 
     }
